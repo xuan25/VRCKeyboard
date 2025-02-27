@@ -7,9 +7,12 @@ Shader "Xuan25/ChromaKeyShader"
         _DepthOverrideValue ("Depth Override Value", Float) = 1
     }
     SubShader
-    {
-        Tags { "RenderType"="Opaque" }
+    {   
+        Tags { "RenderType"="Opaque" "Queue"="Background" } // We do not do any z-testing, so we render first
         LOD 100
+        ZWrite On       // Enable ZWrite to write to depth buffer so anything rendered after this will be occluded (default for Opaque)
+        ZClip False     // Disable ZClip so that the object is not clipped by the near plane
+        ZTest Always    // Disable Early-ZTest to always render regardless of depth, which allows us to render on top of everything
 
         Pass
         {
@@ -29,29 +32,38 @@ Shader "Xuan25/ChromaKeyShader"
                 float4 vertex : SV_POSITION;
             };
 
+            struct fout {
+                half4 color : SV_Target;
+                float depth : SV_Depth;
+            };    
+
             fixed4 _Color;
             float _DepthOverride;
             float _DepthOverrideValue;
-
+            
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                return o;
+            }
+
+            fout frag (v2f i)
+            {
+                fout o;
+
+                o.color = _Color;
 
                 // depth override
                 // force depth to 1 to always render on top
                 if (_DepthOverride > 0.5)
                 {
-                    o.vertex.z = _DepthOverrideValue;
+                    o.depth = _DepthOverrideValue;
+                } else {
+                    o.depth = i.vertex.z;
                 }
-
+                
                 return o;
-            }
-
-            fixed4 frag (v2f i) : SV_Target
-            {
-                fixed4 col = _Color;
-                return col;
             }
             ENDCG
         }
