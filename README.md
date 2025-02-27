@@ -32,8 +32,8 @@ A 60% keyboard on a VRChat avatar with chroma key functionality for local passth
 1. Toggle **On** to spawn the keyboard.
 2. (Optional) To use the chroma key functionality:
    1. Toggle on **ChromaKey**.
-   2. Toggle on **AlwaysOnTop (Key)** and adjust **AOTDepthOverride** (usually around 35%) to show the chroma key over your hands.
-   3. If the post-processing in the map shifts the key color so that the passthrough stops working:
+   2. Toggle on **AlwaysOnTop (Key)** to show the chroma key over your hands.
+   3. If the post-processing in the map shifts the key color so that the passthrough stops working, there is a workaround:
       1. Toggle on **ClearPostEffectOverlay** to add an extra rendering overlay without any post-processing.
       2. Adjust **FilterCamIPCCorrection** so it works best for you.
 3. Use the **fist gesture** with your **left hand** to hold the keyboard and place it in the desired location.
